@@ -1,17 +1,46 @@
-std::string ariel::Graph::printGraph()
+bool ariel::Algorithms::findCycle(ariel::Graph& g, std::size_t v, std::vector<bool>& visited, std::vector<bool>& recStack, std::vector<int> &parent)
 {
-    int vertices = this->adjMatrix.size();
-    int edges = 0;
+    visited[v] = true;
+    recStack[v] = true;
+    std::size_t numVertices = g.size();
 
-    for (std::size_t i = 0; i < vertices; ++i) {
-        for (std::size_t j = i; j < vertices; ++j) { // Start from 'i' to count each edge once
-            if (this->adjMatrix[i][j] != 0) {
-                edges++;
+    for (std::size_t i = 0; i < numVertices; i++) {
+        if (g[v][i] != 0) {  // There is an edge from v to i
+            if (!visited[i]) {
+                parent[i] = v;
+                if (findCycle(g, i, visited, recStack, parent)) {
+                    return true;
+                }
+            } else if (recStack[i]) {
+                // Cycle found, print the cycle
+                std::size_t current = v;
+                while (current != i) {
+                    std::cout << current << " -> ";
+                    current = (size_t)parent[current];
+                }
+                std::cout << i << " -> " << v << std::endl;
+                return true;
             }
         }
     }
 
-    std::string result = "Graph with " + std::to_string(vertices) + " vertices and " + std::to_string(edges) + " edges.\n";
-    return result;    std::cout << "Graph with " << vertices << " vertices and " << edges << " edges." << std::endl;
+    recStack[v] = false;
+    return false;
 }
 
+
+bool ariel::Algorithms::isContainsCycle(ariel::Graph& g)
+{
+    std::size_t numVertices = g.size();
+    std::vector<bool> visited(numVertices, false);
+    std::vector<bool> recStack(numVertices, false);  // Recursive stack to track back edges
+    std::vector<int> parent(numVertices, -1);        // To store the path of nodes
+
+    for (std::size_t v = 0; v < numVertices; v++) {
+        if (!visited[v]) {
+            if (findCycle(g, v, visited, recStack, parent)) {
+                return true;  // Stop after finding the first cycle
+            }
+        }
+    }
+    return false;
