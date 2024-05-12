@@ -1,13 +1,17 @@
-In file included from Algorithms.hpp:8,
-                 from Demo.cpp:7:
-Graph.hpp:6:11: error: redefinition of ‘class ariel::Graph’
-    6 |     class Graph
-      |           ^~~~~
-In file included from Demo.cpp:6:
-Graph.hpp:6:11: note: previous definition of ‘class ariel::Graph’
-    6 |     class Graph
-      |           ^~~~~
-make: *** [Makefile:26: Demo.o] Error 1
+std::string ariel::Graph::printGraph()
+{
+    int vertices = this->adjMatrix.size();
+    int edges = 0;
 
+    for (std::size_t i = 0; i < vertices; ++i) {
+        for (std::size_t j = i; j < vertices; ++j) { // Start from 'i' to count each edge once
+            if (this->adjMatrix[i][j] != 0) {
+                edges++;
+            }
+        }
+    }
 
+    std::string result = "Graph with " + std::to_string(vertices) + " vertices and " + std::to_string(edges) + " edges.\n";
+    return result;    std::cout << "Graph with " << vertices << " vertices and " << edges << " edges." << std::endl;
+}
 
