@@ -1,4 +1,13 @@
-error: conversion to ‘std::vector<std::vector<int> >::size_type’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Werror=sign-conversion]
-   23 |             if (this->adjMatrix[i][j] != 0) {
+In file included from Algorithms.hpp:8,
+                 from Demo.cpp:7:
+Graph.hpp:6:11: error: redefinition of ‘class ariel::Graph’
+    6 |     class Graph
+      |           ^~~~~
+In file included from Demo.cpp:6:
+Graph.hpp:6:11: note: previous definition of ‘class ariel::Graph’
+    6 |     class Graph
+      |           ^~~~~
+make: *** [Makefile:26: Demo.o] Error 1
+
 
 
