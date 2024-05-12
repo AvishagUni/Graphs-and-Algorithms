@@ -19,11 +19,11 @@ namespace ariel
     {
     private:
         static void DFS(std::size_t v, std::vector<bool>& visited, const ariel::Graph& g);
-        static bool isWeighted(ariel::Graph& g);
         static std::string bellmanFord(ariel::Graph& g, std::size_t src, std::size_t dest);
         static std::string BFS(ariel::Graph& g, std::size_t src, std::size_t dest);
         static bool findCycle(ariel::Graph& g, std::size_t v, std::vector<bool>& visited, std::vector<bool>& recStack, std::vector<int>& parent);
     public:
+        static bool isWeighted(ariel::Graph& g);
         static ariel::Graph transpose(ariel::Graph& g);
         static bool isDirected(const ariel::Graph& g);
         static bool isConnected(ariel::Graph& g);
