@@ -1,3 +1,19 @@
-clang++ -std=c++11 -Werror -Wsign-conversion -c TestCounter.cpp -o TestCounter.o
-make: clang++: No such file or directory
-make: *** [Makefile:27: TestCounter.o] Error 127
+sudo apt install clang
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Some packages could not be installed. This may mean that you have
+requested an impossible situation or if you are using the unstable
+distribution that some required packages have not yet been created
+or been moved out of Incoming.
+The following information may help to resolve the situation:
+
+The following packages have unmet dependencies:
+ lib32gcc-s1 : Depends: gcc-12-base (= 12-20220319-1ubuntu1) but 12.3.0-1ubuntu1~22.04 is to be installed
+ lib32stdc++6 : Depends: gcc-12-base (= 12-20220319-1ubuntu1) but 12.3.0-1ubuntu1~22.04 is to be installed
+ libc6-i386 : Depends: libc6 (= 2.35-0ubuntu3) but 2.35-0ubuntu3.7 is to be installed
+ libobjc-11-dev : Depends: gcc-11-base (= 11.2.0-19ubuntu1) but 11.4.0-1ubuntu1~22.04 is to be installed
+                  Depends: libgcc-11-dev (= 11.2.0-19ubuntu1) but 11.4.0-1ubuntu1~22.04 is to be installed
+                  Depends: libobjc4 (>= 11.2.0-19ubuntu1) but it is not going to be installed
+E: Unable to correct problems, you have held broken packages.
+
