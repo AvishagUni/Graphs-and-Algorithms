@@ -1,0 +1,3 @@
+clang++ -std=c++11 -Werror -Wsign-conversion -c TestCounter.cpp -o TestCounter.o
+make: clang++: No such file or directory
+make: *** [Makefile:27: TestCounter.o] Error 127
