@@ -1,47 +1,11 @@
-bool ariel::Algorithms::findCycle(ariel::Graph& g, std::size_t v, std::vector<bool>& visited, std::vector<bool>& recStack, std::vector<int> &parent)
-{
-    visited[v] = true;
-    recStack[v] = true;
-    std::size_t numVertices = g.size();
+vector<vector<int>> graph3 = {
+        {0, 1, 0, 0, 0},
+        {1, 0, 3, 0, 0},
+        {0, 3, 0, 4, 0},
+        {0, 0, 4, 0, 5},
+        {0, 0, 0, 5, 0}};
+    g.loadGraph(graph3); // Load the graph to the object.
 
-    for (std::size_t i = 0; i < numVertices; i++) {
-        if (g[v][i] != 0) {  // There is an edge from v to i
-            if (!visited[i]) {
-                parent[i] = v;
-                if (findCycle(g, i, visited, recStack, parent)) {
-                    return true;
-                }
-            } else if (recStack[i] && parent[v] != i) {
-                // Cycle found, print the cycle
-                std::size_t current = v;
-                while (current != i) {
-                    std::cout << current << "->";
-                    current = (size_t)parent[current];
-                }
-                std::cout << i << "->" << v;
-                return true;
-            }
-        }
-    }
-
-    recStack[v] = false;
-    return false;
-}
-
-bool ariel::Algorithms::isContainsCycle(ariel::Graph& g)
-{
-    std::size_t numVertices = g.size();
-    std::vector<bool> visited(numVertices, false);
-    std::vector<bool> recStack(numVertices, false);  // Recursive stack to track back edges
-    std::vector<int> parent(numVertices, -1);        // To store the path of nodes
-
-    for (std::size_t v = 0; v < numVertices; v++) {
-        if (!visited[v]) {
-            if (findCycle(g, v, visited, recStack, parent)) {
-                return true;  // Stop after finding the first cycle
-            }
-        }
-    }
-    return false;
-//    std::cout << "0" << std::endl;
-}
+    g.printGraph();                                    // Should print: "Graph with 5 vertices and 4 edges."
+    cout << Algorithms::isConnected(g) << endl;        // Should print: "1" (true).
+    cout << Algorithms::shortestPath(g, 0, 4) << endl; // Should print: 0->1->2->3->4.
