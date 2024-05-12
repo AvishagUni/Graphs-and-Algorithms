@@ -1,28 +1,53 @@
-bool isBipartite(const std::vector<std::vector<int>>& graph) {
-    int n = graph.size();
-    std::vector<int> colors(n, -1);  // -1 indicates uncolored, 0 and 1 are the two colors
+std::string ariel::Algorithms::isBipartite(ariel::Graph& g)
+{
+    std::size_t numVertices = g.size();
+    std::vector<int> color(numVertices, -1);// -1 indicates uncolored, 0 is one color, 1 is another
+    std::vector<std::size_t> group1, group2;
+    std::queue<std::size_t> q;
 
-    for (int start = 0; start < n; ++start) {  // Handle disconnected components
-        if (colors[start] == -1) {  // Not colored
-            std::queue<int> q;
-            q.push(start);
-            colors[start] = 0;  // Start coloring with 0
+    for (std::size_t s = 0; s < numVertices; s++) {
+        if (color[s] == -1) {  // Not colored, so color it and check
+            color[s] = 0;  // Start coloring with 0
+            group1.push_back(s);  // Add to group1
+            q.push(s);
 
             while (!q.empty()) {
-                int u = q.front();
+                std::size_t u = q.front();
                 q.pop();
 
-                for (int v = 0; v < n; ++v) {
-                    if (graph[u][v] && colors[v] == -1) {  // Check for an edge and uncolored vertex
-                        colors[v] = 1 - colors[u];  // Alternate the color
-                        q.push(v);
-                    } else if (graph[u][v] && colors[v] == colors[u]) {  // Same color on both ends
-                        return false;
+                for(std::size_t v=0; v<numVertices; v++)
+                {
+                    if(g[u][v]!= 0) 
+                    {
+                        if(color[v] == -1)
+                        {
+                            color[v] = 1-color[u];
+                            q.push(v);
+                        }
+                        else if(color[v]==color[u])
+                        {
+                            return "0";
+                        }
+
                     }
                 }
-            }
         }
     }
+ }
 
-    return true;
+    std::string result = "The graph is bipartite: A={";
+
+    for (std::size_t i = 0; i < group1.size(); i++) {
+        if (i > 0) result += ", ";
+        result += std::to_string(group1[i]);
+    }
+
+    result += "}, B={";
+
+    for (std::size_t i = 0; i < group2.size(); i++) {
+        if (i > 0) result += ", ";
+        result += std::to_string(group2[i]);
+    }
+    result += "}.\n";
+    return result;
 }
