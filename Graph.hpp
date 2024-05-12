@@ -1,3 +1,10 @@
+// Avishag Minnes
+// 213080088
+// minnesav@gmail.com
+
+#ifndef GRAPH_H
+#define GRAPH_H
+
 #include <iostream>
 #include <vector>
 
@@ -7,12 +14,12 @@ namespace ariel
     {
     private:
         std::vector<std::vector<int>> adjMatrix;
-//        std::vector<std::vector<std::pair<int, int>>> adjList; // Adjacency list where each pair is (neighbor, weight)
-
     public:
         void loadGraph(const std::vector<std::vector<int>>& matrix);
         std::string printGraph();
-        [[nodiscard]] int size() const;
-        const std::vector<int>& operator[](int index) const;  // Const overload for read-only access
+        [[nodiscard]] std::size_t size() const;
+        const std::vector<int>& operator[](std::size_t index) const;  // Const overload for read-only access
     };
 }
+
+#endif
