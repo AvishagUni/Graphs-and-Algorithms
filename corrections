@@ -1,53 +1,13 @@
-std::string ariel::Algorithms::isBipartite(ariel::Graph& g)
-{
-    std::size_t numVertices = g.size();
-    std::vector<int> color(numVertices, -1);// -1 indicates uncolored, 0 is one color, 1 is another
-    std::vector<std::size_t> group1, group2;
-    std::queue<std::size_t> q;
+vector<vector<int>> graph2 = {
+        {0, 1, 1, 0, 0},
+        {1, 0, 1, 0, 0},
+        {1, 1, 0, 1, 0},
+        {0, 0, 1, 0, 0},
+        {0, 0, 0, 0, 0}};
 
-    for (std::size_t s = 0; s < numVertices; s++) {
-        if (color[s] == -1) {  // Not colored, so color it and check
-            color[s] = 0;  // Start coloring with 0
-            group1.push_back(s);  // Add to group1
-            q.push(s);
+    g.loadGraph(graph2); // Load the graph to the object.
 
-            while (!q.empty()) {
-                std::size_t u = q.front();
-                q.pop();
-
-                for(std::size_t v=0; v<numVertices; v++)
-                {
-                    if(g[u][v]!= 0) 
-                    {
-                        if(color[v] == -1)
-                        {
-                            color[v] = 1-color[u];
-                            q.push(v);
-                        }
-                        else if(color[v]==color[u])
-                        {
-                            return "0";
-                        }
-
-                    }
-                }
-        }
-    }
- }
-
-    std::string result = "The graph is bipartite: A={";
-
-    for (std::size_t i = 0; i < group1.size(); i++) {
-        if (i > 0) result += ", ";
-        result += std::to_string(group1[i]);
-    }
-
-    result += "}, B={";
-
-    for (std::size_t i = 0; i < group2.size(); i++) {
-        if (i > 0) result += ", ";
-        result += std::to_string(group2[i]);
-    }
-    result += "}.\n";
-    return result;
-}
+    g.printGraph();                                    // Should print: "Graph with 5 vertices and 4 edges."
+    cout << Algorithms::isConnected(g) << endl;        // Should print: "0" (false).
+    cout << Algorithms::shortestPath(g, 0, 4) << endl; // Should print: "-1" (there is no path between 0 and 4).
+    cout << Algorithms::isContainsCycle(g) << endl;    // Should print: "The cycle is: 0->1->2->0".
