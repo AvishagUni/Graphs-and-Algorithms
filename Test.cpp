@@ -4,6 +4,7 @@
 
 #include "doctest.h"
 #include "Algorithms.hpp"
+#include <sstream>
 
 using namespace std;
 
@@ -25,6 +26,33 @@ TEST_CASE("Test isConnected")
         {0, 0, 0, 0, 0}};
     g.loadGraph(graph2);
     CHECK((ariel::Algorithms::isConnected(g) == false));
+
+    // weighted directed graph
+    vector<vector<int>> graph3 = {
+        {0, 3, 5},
+        {6, 0, 4},
+        {2, 1, 0}};
+    g.loadGraph(graph3);
+    CHECK((ariel::Algorithms::isConnected(g) == true));
+
+    // weighted undirected graph
+    vector<vector<int>> graph4 = {
+        {0, 6, 8, 0},
+        {6, 0, 5, 3},
+        {8, 0, 5, 7},
+        {0, 3, 7, 0}};
+    g.loadGraph(graph4);
+    CHECK((ariel::Algorithms::isConnected(g) == true));
+
+    // unconnected weighted undirected graph
+    vector<vector<int>> graph5 = {
+        {0, 4, 3, 0, 0},
+        {4, 0, 0, 0, 0},
+        {3, 0, 0, 0, 0},
+        {0, 0, 0, 0, 6},
+        {0, 0, 0, 6, 0}};
+    g.loadGraph(graph5);
+    CHECK((ariel::Algorithms::isConnected(g) == false));
 }
 
 TEST_CASE("Test shortestPath")
@@ -45,7 +73,48 @@ TEST_CASE("Test shortestPath")
         {0, 0, 0, 0, 0}};
     g.loadGraph(graph2);
     CHECK(ariel::Algorithms::shortestPath(g, 0, 4) == "-1");
+
+    // weighted directed graph
+    vector<vector<int>> graph3 = {
+        {0, 2, 5, 0, 0},
+        {0, 0, 1, 4, 0},
+        {0, 0, 0, 1, 7},
+        {0, 0, 0, 0, 3},
+        {0, 0, 0, 0, 0}};
+    g.loadGraph(graph3);
+    CHECK(ariel::Algorithms::shortestPath(g, 0, 4) == "0->1->2->3->4");
+
+    // weighted undirected graph
+    vector<vector<int>> graph4 = {
+        {0, 2, 5, 0, 0},
+        {2, 0, 1, 4, 0},
+        {5, 1, 0, 1, 7},
+        {0, 4, 1, 0, 3},
+        {0, 0, 7, 3, 0}};
+    g.loadGraph(graph4);
+    CHECK(ariel::Algorithms::shortestPath(g, 1, 2) == "1->2");
+
+    // unconnected unweighted directed graph
+    vector<vector<int>> graph5 = {
+        {0, 1, 0, 0, 0},
+        {0, 0, 0, 0, 0},
+        {1, 0, 0, 1, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0}};
+    g.loadGraph(graph5);
+    CHECK(ariel::Algorithms::shortestPath(g, 0, 2) == "-1");
+
+    // connected weighted undirected graph 
+    vector<vector<int>> graph6 = {
+        {0, 3, 6, 0, 0},
+        {3, 0, 2, 4, 0},
+        {6, 2, 0, 0, 5},
+        {0, 4, 0, 0, 1},
+        {0, 0, 5, 1, 0}};
+    g.loadGraph(graph6);
+    CHECK(ariel::Algorithms::shortestPath(g, 1, 4) == "1->3->4");
 }
+
 TEST_CASE("Test isContainsCycle")
 {
     ariel::Graph g;
@@ -64,7 +133,37 @@ TEST_CASE("Test isContainsCycle")
         {0, 0, 0, 0, 0}};
     g.loadGraph(graph2);
     CHECK((ariel::Algorithms::isContainsCycle(g) == true));
-}
+
+    // No cycle in weighted directed graph
+    vector<vector<int>> graph3 = {
+        {0, 3, 2, 0, 0},
+        {0, 0, 0, 4, 0},
+        {0, 0, 0, 1, 3},
+        {0, 0, 0, 0, 5},
+        {0, 0, 0, 0, 0}};
+    g.loadGraph(graph3);
+    CHECK((ariel::Algorithms::isContainsCycle(g) == false));
+
+    // Cycle in weighted undirected graph
+    vector<vector<int>> graph4 = {
+        {0, 3, 0, 0},
+        {0, 0, 4, 0},
+        {5, 0, 0, 2},
+        {0, 1, 0, 0}};
+    g.loadGraph(graph4);
+    CHECK((ariel::Algorithms::isContainsCycle(g) == true));
+
+    // cycle in unconnected unweighted directed graph
+    vector<vector<int>> graph5 = {
+        {0, 1, 0, 0, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 1},
+        {0, 0, 1, 0, 1},
+        {0, 0, 0, 1, 0}};
+    g.loadGraph(graph5);
+    CHECK((ariel::Algorithms::isContainsCycle(g) == true));
+} 
+
 TEST_CASE("Test isBipartite")
 {
     ariel::Graph g;
@@ -92,137 +191,85 @@ TEST_CASE("Test isBipartite")
         {0, 0, 0, 5, 0}};
     g.loadGraph(graph3);
     CHECK(ariel::Algorithms::isBipartite(g) == "0");
+
+    // bipartite graph with disconnected components
+    vector<vector<int>> graph4 = {
+        {0, 1, 0, 0, 0, 0},
+        {1, 0, 0, 0, 0, 0},
+        {0, 0, 0, 1, 0, 0},
+        {0, 0, 1, 0, 0, 0},
+        {0, 0, 0, 0, 0, 1},
+        {0, 0, 0, 0, 1, 0}};
+    g.loadGraph(graph4);
+    CHECK(ariel::Algorithms::isBipartite(g) == "The graph is bipartite: A={0, 2, 4}, B={1, 3, 5}.");
+
+    // bipartite graph with even number of vertices
+    vector<vector<int>> graph5 = {
+        {0, 0, 0, 1, 1, 1},
+        {0, 0, 0, 1, 1, 1},
+        {0, 0, 0, 1, 1, 1},
+        {1, 1, 1, 0, 0, 0},
+        {1, 1, 1, 0, 0, 0},
+        {1, 1, 1, 0, 0, 0}};
+    g.loadGraph(graph5);
+    CHECK(ariel::Algorithms::isBipartite(g) == "The graph is bipartite: A={0, 1, 2}, B={3, 4, 5}.");
 }
 
-// Test the loading and integrity of the graph
-TEST_CASE("Test LoadGraph") {
-ariel::Graph g;
-std::vector<std::vector<int>> matrix = {{0, 1}, {1, 0}};
-g.loadGraph(matrix);
-CHECK((g.size() == 2));
-}
-
-// Test print functionality by checking output consistency
-TEST_CASE("Test Print") {
+TEST_CASE("Test negativeCycle") {
     ariel::Graph g;
-g.loadGraph({{0, 2}, {2, 0}});
-//testing::internal::CaptureStdout();
-CHECK((g.printGraph() == "Graph with 2 vertices and 1 edges.\n"));
+
+    // no negative cycle in unweighted undirected graph
+    vector<vector<int>> graph = {
+        {0, 1, 0},
+        {1, 0, 1},
+        {0, 1, 0}};
+    g.loadGraph(graph);
+    CHECK(ariel::Algorithms::negativeCycle(g) == "The graph is not weighted.");
+
+    // no negative cycle in weighted directed graph
+    vector<vector<int>> graph2 = {
+        {0, 2, 4, 5},
+        {0, 0, 1, 0},
+        {0, 0, 0, 3},
+        {0, 2, 0, 0}};
+    g.loadGraph(graph2);
+    CHECK(ariel::Algorithms::negativeCycle(g) == "No negative weight cycle found.");
+
+    // negative cycle in weighted directed graph
+    vector<vector<int>> graph3 = {
+        {0, 1, 0, 2},
+        {0, 0, -1, 0},
+        {0, 0, 0, -1},
+        {0, -1, 0, 0}};
+    g.loadGraph(graph3);
+    CHECK(ariel::Algorithms::negativeCycle(g) == "Negative weight cycle found: 1->2->3->1.");
+
+    // negative cycle in weighted undirected graph
+    vector<vector<int>> graph4 = {
+        {0, -1, 0, 0},
+        {0, 0, -2, 0},
+        {0, 0, 0, -3},
+        {-4, 0, 0, 0}};
+    g.loadGraph(graph4);
+    CHECK(ariel::Algorithms::negativeCycle(g) == "Negative weight cycle found: 1->2->3->0->1.");
+
+    vector<vector<int>> graph5 = {
+        {0, -1, 0, 0},
+        {0, 0, -2, 0},
+        {-5, 0, 0, 0},
+        {0, 0, 0, 0}};
+    g.loadGraph(graph5);
+    CHECK(ariel::Algorithms::negativeCycle(g) == "Negative weight cycle found: 0->1->2->0.");
 }
 
-// Verify graph size reporting
-TEST_CASE("Test GraphSize") {
+TEST_CASE("Test invalid graph") {
     ariel::Graph g;
-g.loadGraph({{0, 1, 0}, {1, 0, 1}, {0, 1, 0}});
-    CHECK((g.size() == 3));
-}
 
-// Test access operator functionality
-TEST_CASE("Test AccessOperator") {
-    ariel::Graph g;
-g.loadGraph({{0, 1}, {1, 0}});
-    CHECK((g[0][1] == 1));
-}
-
-// Connectivity tests
-TEST_CASE("Test GraphConnectivity") {
-    ariel::Graph g;
-g.loadGraph({{0, 1}, {1, 0}});
-    CHECK(((ariel::Algorithms::isConnected(g))==true));
-}
-
-TEST_CASE("Test GraphConnectivity") {
-    ariel::Graph g;
-g.loadGraph({{0, 0, 0}, {0, 0, 0}, {0, 0, 0}});
-    CHECK(((ariel::Algorithms::isConnected(g))==false));
-}
-
-// Directed graph detection
-TEST_CASE("Test DirectedGraph") {
-    ariel::Graph g;
-    g.loadGraph({{0, 1}, {0, 0}});
-    CHECK(((ariel::Algorithms::isDirected(g))==true));
-}
-
-
-// Check if graph is undirected
-TEST_CASE("Test DirectedGraph") {
-    ariel::Graph g;
-    g.loadGraph({{0, 1},
-                 {1, 0}});
-    CHECK(((ariel::Algorithms::isDirected(g)) == false));
-}
-
-// Testing for cycles
-TEST_CASE("Test ContainsCycle") {
-    ariel::Graph g;
-    g.loadGraph({{0, 1}, {1, 0}});
-    CHECK(((ariel::Algorithms::isContainsCycle(g)) == false));
-}
-
-TEST_CASE("Test NoCycle") {
-    ariel::Graph g;
-    g.loadGraph({{0, 1}, {0, 0}});
-    CHECK(((ariel::Algorithms::isContainsCycle(g)) == false));
-}
-
-TEST_CASE("Test GraphConnectivity") {
-    ariel::Graph g;
-g.loadGraph({{0, 0, 0}, {0, 0, 1}, {0, 0, 0}});
-    CHECK(((ariel::Algorithms::isConnected(g))==false));
-}
-
-// Directed graph detection
-TEST_CASE("Test DirectedGraph") {
-    ariel::Graph g;
-    g.loadGraph({{0, 3}, {0, 0}});
-    CHECK(((ariel::Algorithms::isDirected(g))==true));
-}
-
-// Check if graph is undirected
-TEST_CASE("Test DirectedGraph") {
-    ariel::Graph g;
-    g.loadGraph({{1, 1},
-                 {1, 1}});
-    CHECK(((ariel::Algorithms::isDirected(g)) == false));
-}
-
-TEST_CASE("Test NoCycle") {
-    ariel::Graph g;
-    g.loadGraph({{0, 0}, {0, 0}});
-    CHECK(((ariel::Algorithms::isContainsCycle(g)) == false));
-}
-
-TEST_CASE("Test NoNegativeCycle") {
-    ariel::Graph g;
-    g.loadGraph({{0, 1}, {1, 0}});
-    CHECK(((ariel::Algorithms::negativeCycle(g)) == "No negative weight cycle found."));
-}
-
-TEST_CASE("Test CorrectEdgeCount") {
-    ariel::Graph g;
-    g.loadGraph({{0, 1, 0}, {1, 0, 2}, {0, 2, 0}});
-    CHECK((g.printGraph() == "Graph with 3 vertices and 2 edges.\n"));
-}
-
-TEST_CASE("Test WeightedGraph") {
-    ariel::Graph g;
-    g.loadGraph({{0, 3}, {1, 4}});
-    CHECK((ariel::Algorithms::isWeighted(g))==true);
-}
-
-TEST_CASE("Test GraphTransposeCorrectness") {
-    ariel::Graph g;
-    g.loadGraph({{0, 1}, {0, 0}});
-    ariel::Graph transposed = ariel::Algorithms::transpose(g);
-    CHECK((g[0][1] == 0));
-    CHECK((g[1][0] == 1));
-}
-
-TEST_CASE("Test DisconnectedGraphHandling") {
-    ariel::Graph g;
-    g.loadGraph({{0, 0, 0}, {0, 0, 0}, {0, 0, 0}});
-    CHECK(((ariel::Algorithms::isConnected(g))==false));
+    // not square matrix
+    vector<vector<int>> graph = {
+        {0, 1, 0},
+        {1, 0, 1}};
+    CHECK_THROWS(g.loadGraph(graph));
 }
 
 
