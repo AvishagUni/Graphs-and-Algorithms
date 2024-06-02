@@ -12,14 +12,18 @@ namespace ariel
 {
     class Graph
     {
-    private:
-        std::vector<std::vector<int>> adjMatrix;
+   private:
+       std::vector<std::vector<int>> adjMatrix;
     public:
+        // memeber functions
         void loadGraph(const std::vector<std::vector<int>>& matrix);
-        std::string printGraph();
-        [[nodiscard]] std::size_t size() const;
+        std::string printGraph() const;
+        std::size_t size() const;
+        int edgeCount() const;
+
+        // operators
         const std::vector<int>& operator[](std::size_t index) const;  // Const overload for read-only access
     };
-}
+} // namespace ariel
 
-#endif
+#endif // GRAPH_H
