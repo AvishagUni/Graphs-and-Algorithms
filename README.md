@@ -1,55 +1,79 @@
-# TichnutMaarachot2.1
+# Graph and Algorithms Library
 
-Graph and Algorithms Library:
-This library provides a comprehensive implementation of a graph data structure alongside a suite of algorithms to manipulate and analyze its properties. 
+This project is a comprehensive **Graph and Algorithms Library** developed to handle complex graph structures and provide efficient solutions to common graph-related problems. It offers a flexible, C++-based graph data structure and a set of algorithms for tasks like connectivity checks, pathfinding, cycle detection, and more.
 
-Features:
-Robust Graph Operations: Includes methods for graph loading, printing, and accessing properties.
-Advanced Graph Algorithms: Offers a variety of algorithms for connectivity checks, pathfinding, cycle detection, and more.
-Implementation Details
+---
 
-Graph Class:
-The Graph class is designed to efficiently manage graph data. 
+## 📋 Features
 
-Data Structures:
-Adjacency Matrix (adjMatrix): A 2D vector that holds edge weights directly between any two nodes, ideal for quick lookups and updates which are O(1) operations.
+### 1. Robust Graph Operations
+- **Graph Loading**: Load graphs from adjacency matrices for quick setup.
+- **Graph Printing**: Display the structure and details of the graph (vertices, edges).
+- **Access Methods**: Retrieve specific properties and perform read-only operations on the graph.
 
-Key Methods:
-loadGraph(const std::vector<std::vector<int>>& matrix): Initializes the graph with a square matrix. Validates the matrix to ensure it is square, providing robust error handling to prevent runtime issues.
+### 2. Advanced Graph Algorithms
+- **Connectivity**: Check if all nodes are reachable and, for directed graphs, assess strong connectivity.
+- **Cycle Detection**: Identify cycles within the graph.
+- **Shortest Path**: Compute shortest paths using BFS for unweighted graphs and Bellman-Ford for weighted graphs.
+- **Bipartiteness**: Verify if the graph is bipartite using a coloring algorithm.
+- **Negative Cycle Detection**: Detect negative cycles with Bellman-Ford.
 
-printGraph(): Outputs the number of vertices and edges, which are calculated dynamically. For edges, it counts only unique connections in the matrix to avoid duplicates in an undirected graph.
+---
 
-size() const: Returns the number of vertices, which corresponds to the dimension of the adjacency matrix.
+## 🔧 Implementation Details
 
-operator[](int index) const: Facilitates easy access to adjacency list items, enabling read-only operations that are crucial for algorithms that should not modify the graph.
+### Graph Class
+The `Graph` class is built to efficiently manage graph data using an adjacency matrix. Key elements include:
 
-Algorithms Class:
-The Algorithms class contains static methods, making them accessible without needing an object instance. This design choice emphasizes utility and functionality, as these methods operate universally on any Graph object passed to them.
+- **Data Structure**: `adjMatrix`, a 2D vector storing edge weights between nodes for fast O(1) lookups.
+  
+- **Key Methods**:
+  - `loadGraph(const std::vector<std::vector<int>>& matrix)`: Initializes the graph from a square matrix, validating input to ensure robustness.
+  - `printGraph()`: Prints vertex and edge count, dynamically calculated. Avoids duplicate edge counts in undirected graphs.
+  - `size() const`: Returns the number of vertices, derived from matrix dimensions.
+  - `operator[](int index) const`: Provides read-only access to adjacency list items, essential for non-modifying algorithm operations.
 
-Detailed Functionality
-Connectivity (isConnected): Uses depth-first search (DFS) to check if all nodes are reachable from a given start node. For directed graphs, it additionally checks reachability in the transposed graph, ensuring strong connectivity.
+### Algorithms Class
+The `Algorithms` class provides static methods that operate directly on any `Graph` instance, emphasizing utility and versatility.
 
-Cycle Detection (findCycle): Employs DFS to explore the graph. It tracks nodes currently in the recursion stack to detect back edges, which indicate cycles.
+#### Core Algorithms
+- **Connectivity (isConnected)**: Uses DFS to verify reachability for all nodes. For directed graphs, it checks the transposed graph to confirm strong connectivity.
+- **Cycle Detection (findCycle)**: Uses DFS and tracks nodes in the recursion stack to detect cycles.
+- **Shortest Path (shortestPath)**: Determines shortest paths with BFS (unweighted) or Bellman-Ford (weighted), adapting to graph type for optimal performance.
+- **Bipartiteness (isBipartite)**: Uses a coloring algorithm to check for valid bipartite conditions.
+- **Negative Cycle Detection (negativeCycle)**: Implements Bellman-Ford to detect negative weight cycles by monitoring changes in shortest path estimates.
 
-Shortest Path (shortestPath): Determines the shortest path using BFS for unweighted graphs and Bellman-Ford for weighted graphs. This method is versatile, adapting to the nature of the graph to optimize the pathfinding process.
+---
 
-Bipartiteness (isBipartite): Uses a coloring algorithm to ensure no two adjacent nodes share the same color, which would violate bipartite conditions.
+## 🛠 Helper Functions
 
-Negative Cycle Detection (negativeCycle): Implements the Bellman-Ford algorithm, checking for changes in the shortest path estimates after sufficient iterations to determine the presence of negative weight cycles.
+Given the flexibility required to handle weighted/unweighted and directed/undirected graphs, several helper functions support core functionality:
 
-Helper Functions:
-Because we have to take in consideration that the graph has many options (weighted, unweighted, directed and undirected), I had to build a few helper functions to properly implement the main ones.
+- **DFS**: Depth-first search traversal.
+- **BFS**: Breadth-first search to find the shortest path in unweighted graphs.
+- **isWeighted**: Checks if the graph contains weighted edges.
+- **bellmanFord**: Runs Bellman-Ford and indicates if a negative cycle is detected, otherwise returns the shortest path.
+- **findCycle**: Detects cycles by revisiting nodes.
+- **transpose**: Transposes the graph for strong connectivity checks in directed graphs.
+- **isDirected**: Verifies if the graph is directed based on matrix symmetry.
 
-DFS : applies the depth-first search on the graph.
+---
 
-isWeighted : checks if graph is weighted.
+## 📂 Project Structure
 
-bellman Ford : applies the bellman-ford algorithm while returning a signal if it found a negative cycle, if not returning the shortest path between two vertices.
+- **Graph.hpp/cpp**: Defines the `Graph` class for managing graph structure and data.
+- **Algorithms.hpp/cpp**: Contains static methods for graph analysis, such as connectivity and pathfinding.
+- **Main.cpp**: Demonstrates library usage and provides examples of graph manipulation and analysis.
 
-BFS : applies the breadth-first search on the graph, returning the shortest path between two vertices if such exists.
+---
 
-findCycle : searches for a cycle in the graph (when it returns to a vertice that was already visited).
+## 🚀 Getting Started
 
-transpose : if the graph is directed, switches the direction of the edges.
+### Requirements
+- **C++ Compiler**: Ensure C++11 or higher for compatibility.
 
-isDirected : checks if the graph is directed (if the matrix is symmetrical or not).
+### Compilation
+To compile the project, navigate to the project directory and use:
+```bash
+g++ -std=c++11 -o graph_library Main.cpp Graph.cpp Algorithms.cpp
+
